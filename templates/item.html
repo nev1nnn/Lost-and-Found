@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item['item_name'] }} | CampusFind</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand">
+                <div class="campus-brand">
+                    <span class="campus-name">CampusFind</span>
+                    <span class="campus-subtitle">REVA University</span>
+                </div>
+            </a>
+
+            <div class="nav-links">
+
+    <a href="/" class="nav-link">
+        Home
+    </a>
+
+    {% if session.get("user_id") %}
+
+        <span class="nav-link">
+            👤 {{ session.get("username") }}
+        </span>
+
+        <a href="/post" class="nav-button">
+            + Post Item
+        </a>
+
+        <a href="/logout" class="nav-link">
+            Logout
+        </a>
+
+    {% else %}
+
+        <a href="/login" class="nav-link">
+            Login
+        </a>
+
+        <a href="/register" class="nav-button">
+            Register
+        </a>
+
+    {% endif %}
+
+</div>
+        </div>
+    </nav>
+
+    <main class="details-page">
+        <a href="/" class="back-link">← Back to all items</a>
+
+        <div class="details-card">
+            <div class="item-image" style="margin-bottom: 24px;">
+                {% if item['photo'] %}
+                    <img src="{{ url_for('static', filename='uploads/' + item['photo']) }}" alt="{{ item['item_name'] }}">
+                {% else %}
+                    <span style="font-size: 80px;">
+                        {% if item['category'] == 'electronics' %}📱
+                        {% elif item['category'] == 'books' %}📚
+                        {% elif item['category'] == 'documents' %}📄
+                        {% elif item['category'] == 'accessories' %}🎒
+                        {% else %}📦{% endif %}
+                    </span>
+                {% endif %}
+            </div>
+
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                <span class="status {{ item['type'] }}">{{ item['type']|upper }}</span>
+                <span class="category-label" style="font-size: 14px;">Category: {{ item['category'] }}</span>
+            </div>
+
+            <h1 style="font-size: 2rem; font-weight: 900; margin-bottom: 12px; color: #0f172a;">
+                {{ item['item_name'] }}
+            </h1>
+
+            <div style="background: #f8fafc; padding: 16px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 24px; display: flex; gap: 24px;">
+                <div><strong>📍 Location:</strong> {{ item['location'] }}</div>
+                <div><strong>📅 Date:</strong> {{ item['date'] }}</div>
+            </div>
+
+            <div style="margin-bottom: 24px;">
+                <h3 style="font-size: 1rem; font-weight: 800; margin-bottom: 6px;">Description</h3>
+                <p style="color: #475569; line-height: 1.6;">{{ item['description'] }}</p>
+            </div>
+
+            <div style="background: #f0fdfa; border: 1px solid #ccfbf1; padding: 18px; border-radius: 12px; margin-bottom: 28px;">
+                <h3 style="font-size: 0.95rem; font-weight: 800; color: #009ca6; margin-bottom: 4px;">Contact Information</h3>
+                <p style="font-weight: 700; color: #0f172a;">{{ item['contact'] }}</p>
+            </div>
+
+            <!-- HANDOVER & RETURN SECTION -->
+{% if item['status'] == 'active' %}
+    <div class="handover-card">
+        <h3>Mark Item as Returned / Handed Over</h3>
+        <p class="handover-sub">Verify the receiver's identity using their REVA SRN Number before handing over the item.</p>
+
+        <form method="POST" action="/item/{{ item['id'] }}/returned" class="handover-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="received_by_srn">Receiver SRN No. *</label>
+                    <input type="text" id="received_by_srn" name="received_by_srn" class="form-control" placeholder="e.g. R21EG001" pattern="[A-Za-z0-9]+" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="received_by_name">Receiver Full Name *</label>
+                    <input type="text" id="received_by_name" name="received_by_name" class="form-control" placeholder="e.g. Rahul Sharma" required>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="received_location">Handover Location *</label>
+                    <input type="text" id="received_location" name="received_location" class="form-control" placeholder="e.g. Main Library Counter" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="received_at">Date & Time</label>
+                    <input type="datetime-local" id="received_at" name="received_at" class="form-control">
+                </div>
+            </div>
+
+            <button type="submit" class="returned-button">✓ Confirm Handover & Mark Returned</button>
+        </form>
+    </div>
+{% else %}
+    <!-- RETURNED VERIFICATION BADGE CARD -->
+    <div class="return-record-card">
+        <div class="record-header">
+            <span class="status returned">✓ RETURNED & VERIFIED</span>
+        </div>
+        <div class="record-grid">
+            <div>
+                <span class="record-label">Received By</span>
+                <strong>{{ item['received_by_name'] }}</strong>
+            </div>
+            <div>
+                <span class="record-label">SRN Number</span>
+                <strong class="srn-badge">{{ item['received_by_srn'] }}</strong>
+            </div>
+            <div>
+                <span class="record-label">Handover Location</span>
+                <strong>📍 {{ item['received_location'] }}</strong>
+            </div>
+            <div>
+                <span class="record-label">Date & Time</span>
+                <strong>📅 {{ item['received_at'] }}</strong>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+            {% if session.get("user_id") == item["owner_id"] %}
+
+<!-- CRUD ACTIONS -->
+<div style="display: flex; align-items: center; justify-content: space-between; border-top: 1px solid #e2e8f0; padding-top: 20px;">
+
+    <a href="/item/{{ item['id'] }}/edit" class="edit-button">
+        ✏️ Edit Item
+    </a>
+
+    <form method="POST"
+          action="/item/{{ item['id'] }}/delete"
+          onsubmit="return confirm('Are you sure you want to delete this listing?');">
+
+        <button type="submit"
+                class="delete-button"
+                style="margin-top: 0;">
+            🗑 Delete Listing
+        </button>
+
+    </form>
+
+</div>
+
+{% endif %}
+        </div>
+    </main>
+
+    <footer>
+        <p>CampusFind · REVA University © 2026</p>
+    </footer>
+
+</body>
+
+</html>

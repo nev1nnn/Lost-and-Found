@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Register | CampusFind</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+
+            <a href="/" class="brand">
+                <div class="campus-brand">
+                    <span class="campus-name">CampusFind</span>
+                    <span class="campus-subtitle">REVA University</span>
+                </div>
+            </a>
+
+        </div>
+    </nav>
+
+
+    <main class="details-page">
+
+        <div class="edit-card">
+
+            <h1 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 6px;">
+                Create Account
+            </h1>
+
+            <p style="color: #64748b; font-size: 14px; margin-bottom: 28px;">
+                Create an account to post and manage your listings.
+            </p>
+
+
+            <form method="POST">
+
+                <div class="form-group">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        name="username"
+                        class="form-control"
+                        placeholder="Choose a username"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        name="password"
+                        class="form-control"
+                        placeholder="Create a password"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="submit-button"
+                    style="margin-top: 10px;">
+                    Create Account
+                </button>
+
+            </form>
+
+
+            <p style="text-align: center; margin-top: 20px; color: #64748b; font-size: 14px;">
+                Already have an account?
+                <a href="/login"
+                   style="color: #009ca6; font-weight: 700;">
+                    Login
+                </a>
+            </p>
+
+        </div>
+
+    </main>
+
+
+    <footer>
+        <p>CampusFind · REVA University © 2026</p>
+    </footer>
+
+</body>
+
+</html>

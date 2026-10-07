@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Item | CampusFind</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 6px;
+            color: #334155;
+        }
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+        }
+        .form-control:focus {
+            border-color: #009ca6;
+            box-shadow: 0 0 0 3px rgba(0, 156, 166, 0.15);
+        }
+        .type-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        .type-option {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .type-option input {
+            margin-right: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand">
+                <div class="campus-brand">
+                    <span class="campus-name">CampusFind</span>
+                    <span class="campus-subtitle">REVA University</span>
+                </div>
+            </a>
+
+            <div class="nav-links">
+                <a href="/" class="nav-link">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="details-page">
+        <div class="edit-card">
+            <h1 style="font-size: 1.8rem; font-weight: 900; margin-bottom: 6px; color: #0f172a;">Post a New Listing</h1>
+            <p style="color: #64748b; font-size: 14px; margin-bottom: 28px;">Provide details to help reunite this item with its owner on campus.</p>
+
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>What happened?</label>
+                    <div class="type-selector">
+                        <label class="type-option">
+                            <input type="radio" name="type" value="lost" checked> 🔴 I lost something
+                        </label>
+                        <label class="type-option">
+                            <input type="radio" name="type" value="found"> 🟢 I found something
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="item_name">Item Name</label>
+                    <input type="text" id="item_name" name="item_name" class="form-control" placeholder="e.g. Black Dell Laptop Charger" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <select id="category" name="category" class="form-control" required>
+                        <option value="" disabled selected>Select a category</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="books">Books</option>
+                        <option value="documents">Documents / ID Cards</option>
+                        <option value="accessories">Accessories / Bags</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" class="form-control" placeholder="e.g. Main Library 2nd Floor" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">Date</label>
+                        <input type="date" id="date" name="date" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" class="form-control" rows="4" placeholder="Mention distinct features, color, brand, or markings..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="contact">Contact Info</label>
+                    <input type="text" id="contact" name="contact" class="form-control" placeholder="Phone number or campus email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="photo">Item Photo (Optional)</label>
+                    <input type="file" id="photo" name="photo" class="form-control" accept="image/*">
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 28px;">
+                    <a href="/" class="edit-button" style="text-align: center; flex: 1;">Cancel</a>
+                    <button type="submit" class="submit-button" style="flex: 2;">Post Listing →</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <p>CampusFind · REVA University © 2026</p>
+    </footer>
+
+</body>
+
+</html>

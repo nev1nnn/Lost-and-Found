@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusFind | REVA University</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="brand">
+                <div class="campus-brand">
+                    <span class="campus-name">CampusFind</span>
+                    <span class="campus-subtitle">REVA University</span>
+                </div>
+            </a>
+
+            <div class="nav-links">
+
+    <a href="/" class="nav-link">
+        Home
+    </a>
+
+    {% if session.get("user_id") %}
+
+        <span class="nav-link">
+            👤 {{ session.get("username") }}
+        </span>
+
+        <a href="/post" class="nav-button">
+            + Post Item
+        </a>
+
+        <a href="/logout" class="nav-link">
+            Logout
+        </a>
+
+    {% else %}
+
+        <a href="/login" class="nav-link">
+            Login
+        </a>
+
+        <a href="/register" class="nav-button">
+            Register
+        </a>
+
+    {% endif %}
+
+</div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">📦 REVA Campus Lost & Found</div>
+            <h1>Lost it? Found it? <span>Reunite it.</span></h1>
+            <p>Search reported items across campus or post something you've found.</p>
+
+            <form action="/" method="GET" class="hero-search">
+                <div class="search-input-wrapper">
+                    <input type="text" name="search" placeholder="Search by name, description, or location..." value="{{ search }}">
+                </div>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </header>
+
+    <main class="items-section">
+        <div class="section-header">
+            <h2>Recent Listings</h2>
+            <div class="filters">
+                <a href="/" class="{% if not item_type %}active{% endif %}">All</a>
+                <a href="/?type=lost" class="{% if item_type == 'lost' %}active{% endif %}">Lost</a>
+                <a href="/?type=found" class="{% if item_type == 'found' %}active{% endif %}">Found</a>
+            </div>
+        </div>
+
+        <div class="items-grid">
+            {% for item in items %}
+            <a href="/item/{{ item['id'] }}" class="item-card">
+                <div class="item-image">
+                    {% if item['photo'] %}
+                        <img src="{{ url_for('static', filename='uploads/' + item['photo']) }}" alt="{{ item['item_name'] }}">
+                    {% else %}
+                        <span>
+                            {% if item['category'] == 'electronics' %}📱
+                            {% elif item['category'] == 'books' %}📚
+                            {% elif item['category'] == 'documents' %}📄
+                            {% elif item['category'] == 'accessories' %}🎒
+                            {% else %}📦{% endif %}
+                        </span>
+                    {% endif %}
+                </div>
+
+                <div class="item-content">
+                    <div class="item-top">
+                        <span class="status {{ item['type'] }}">{{ item['type']|upper }}</span>
+                        <span class="category-label">{{ item['category'] }}</span>
+                    </div>
+
+                    <h3>{{ item['item_name'] }}</h3>
+                    <p class="item-description">{{ item['description'] }}</p>
+
+                    <div class="item-meta">
+                        <span>📍 {{ item['location'] }}</span>
+                        <span>📅 {{ item['date'] }}</span>
+                    </div>
+                </div>
+            </a>
+            {% else %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px; background: white; border-radius: 16px; border: 1px dashed #cbd5e1;">
+                <h3>No items found</h3>
+                <p style="color: #64748b; margin-top: 5px;">Try adjusting your search terms or filters.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+    <footer>
+        <p>CampusFind · REVA University © 2026</p>
+    </footer>
+
+</body>
+
+</html>
